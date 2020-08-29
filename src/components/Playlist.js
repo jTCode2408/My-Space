@@ -1,8 +1,21 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 
 const Playlist =()=>{
+
+    const [music, setMusic]=useState();
+
+    useEffect=(()=>{
+        axios.get('')
+        .then(res=>{
+            console.log(res)
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+    ,[])
 
     return(
         <div>
