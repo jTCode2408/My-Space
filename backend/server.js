@@ -5,8 +5,8 @@ const querystring =require('querystring');
 
 server.use(express.json());
 
-let client_id= '97a6dd834548478295bdb781f20e6f19'
-let client_sec='b1995e93d7ed4797b0406e4c6c6dab8e'
+
+
 const redirect_uri=
 process.env.REDIRECT_URI || 
 'http://localhost:8888/callback'
