@@ -21,7 +21,7 @@ server.get('/login', function(req, res) {
     querystring.stringify({
       response_type: 'code',
       client_id: process.env.SPOTIFY_CLIENT_ID,
-      scope: 'user-read-private user-read-email user-read-recently-played user-top-read playlist-read-private',
+      scope: 'user-read-recently-played user-top-read playlist-read-private',
       redirect_uri
     }))
 })
@@ -36,7 +36,7 @@ server.get('/callback', function(req, res) {
       grant_type: 'authorization_code'
     },
     headers: {
-      'Authorization': 'Basic ' + (new Buffer(
+      'Authorization': 'Basic ' + (Buffer.from(
         process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
       ).toString('base64'))
     },
