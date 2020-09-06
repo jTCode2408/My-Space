@@ -5,7 +5,7 @@ const querystring =require('querystring');
 
 server.use(express.json());
 
-
+server.use(cors());
 
 const redirect_uri=
 process.env.REDIRECT_URI || 
