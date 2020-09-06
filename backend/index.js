@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const server = require ('./server')
 const PORT = 8888 || process.env.PORT
 
