@@ -1,26 +1,35 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
+//BACKEND: https://my-space-backend.herokuapp.com/
+import {useLocalStorage} from './utils';
 
-
-const Playlist =()=>{
+const Playlist =(key, initialVal)=>{
 
     const [music, setMusic]=useState();
+    const [user,setUser]=useLocalStorage(key, initialVal);
 
-    useEffect=(()=>{
-        axios.get('')
-        .then(res=>{
-            console.log(res)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-    }
-    ,[])
-
+    axios.get('https://my-space-backend.herokuapp.com/login')
+    .then(res=>{
+        console.log(res)
+        
+        //setUser()
+    })
+    .catch(err=>{
+        console.log(err)
+        alert("unable to log in, try again soon!");
+    })
+  
     return(
         <div>
+           
             PLAYLIST COMPONENT
-            <h2>What Im Listening To: </h2>
+            <h2> Spotify Playlists </h2>
+           
+            Log In To Spotify
+
+          
+           
         </div>
     )
 }
