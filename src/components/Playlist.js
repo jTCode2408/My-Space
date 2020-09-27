@@ -4,43 +4,35 @@ import {Link} from 'react-router-dom';
 //BACKEND: https://my-space-backend.herokuapp.com/
 import {useLocalStorage} from './utils';
 import queryString from 'querystring';
+import SpotifyWebApi from 'spotify-web-api-js';
 
 const Playlist =(key, initialVal)=>{
 
     const [music, setMusic]=useState();
     const [user,setUser]=useState();
     const [playlist, setPlaylist] = useState();
-    const parsed = queryString.parse(window.location.search);
-    const accessToken = parsed.access_token;
+    const spotifyApi = new SpotifyWebApi()
 
-   
-       if (!accessToken)
-    return;
-    axios.get('https://api.spotify.com/v1/me', {
-        headers: {'Authorization': 'Bearer' + accessToken}
-        ("Access-Control-Allow-Origin")
-    })
-    .then(res=>{
-        console.log(res)
-        
-        //setUser()
-    })
-    .catch(err=>{
-        console.log(err)
-        alert("unable to log in, try again soon!");
-    })
+    function getHashParams() {
+        const hashParams ={};
+        let e, r = /([^&;=]+)=?([^&;]*)/g,
+        q = window.location.hash.substring(1);
+        e = r.exec(q)
+    while (e) {
+       hashParams[e[1]] = decodeURIComponent(e[2]);
+       e = r.exec(q);
+    }
+    return hashParams
+    }; 
 
+const params = getHashParams();
+const accessToken = params.access_token;
 
-    axios.get('https://api.spotify.com/v1/me/playlists', {
-        headers: { 'Authorization': 'Bearer' + accessToken }
-})
-.then(res=>{
-    console.log(res, "playlist Res")
+if (accessToken){
+    spotifyApi.setAccessToken(accessToken)
+    console.log('TOKEN', accessToken)
 
-})
-.catch(err=>{
-    console.log(err) 
-    alert("unable to get playlists, try again soon!");})
+}
 
 
 
@@ -49,21 +41,16 @@ const Playlist =(key, initialVal)=>{
            
             PLAYLIST COMPONENT
             <h2> Spotify Playlists </h2>
-           
-           
-            <button onClick={() => {
-            window.location = window.location.href.includes('localhost') 
-              ? 'http://localhost:8888/login' 
-              : 'https://my-space-backend.herokuapp.com/login' }
+            { accessToken ? (
+        <a href='http://localhost:8888'> Login to Spotify </a> )
+        : ( <h2>Logged In</h2> )
             }
-            > Log In To Spotify </button>
-            
-
-          
            
         </div>
     )
 }
+
+
 
 
 export default Playlist;
