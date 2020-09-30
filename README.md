@@ -22,4 +22,4 @@ App created to work with spotify log-in flow, display user info, visualizations
 **In Progress**
 
 
-## Backend Repo (https://github.com/jTCode2408/my-space-BE)
+## [Backend Repo](https://github.com/jTCode2408/my-space-BE)
