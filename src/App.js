@@ -8,12 +8,7 @@ function App() {
 
     <div className="App">
 
-     <Route exact path='/'>   <Home/>  </Route>
-
-     <Switch> 
-     <Route path='/playlist'>  <Playlist/> </Route>
-    
-     </Switch>
+   <Playlist/>
     </div>
   );
 }

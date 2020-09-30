@@ -7,12 +7,10 @@ import SpotifyWebApi from 'spotify-web-api-js';
 
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
-    const [music, setMusic]=useState();
-    const [user,setUser]=useState();
-    const [playlist, setPlaylist] = useState();
-    const spotifyApi = new SpotifyWebApi()
+    const [playing, setPlaying] = useState(false);
+    const spotifyApi = new SpotifyWebApi();
 //to get token
-    function getHashParams() {
+    const getHashParams=()=> {
         const hashParams ={};
         let e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
@@ -25,46 +23,56 @@ const Playlist =()=>{
     }; 
 
 const params = getHashParams();
-const accessToken = params.access_token;
+console.log('PARAMS', params);
+const accessToken = params.access_token
 
-    if(accessToken){
-    spotifyApi.setAccessToken(accessToken)
-    console.log('TOKEN', accessToken)
-    setLoggedIn(true);
+spotifyApi.setAccessToken(accessToken)
+console.log('SETTING TOKEN', accessToken)
+   
 
-    }
-       const getPlaylists=()=>{ 
+       const getNowPlaying=()=>{ 
          
-        spotifyApi.getUserPlaylists()
+        spotifyApi.getMyCurrentPlaybackState()
         .then(res=>{
-            console.log('PLAYLISTS', accessToken, res)
+            console.log('PLAYING', accessToken, res)
+            //setPlaying();
+
         })
         
         }   
     
-
+const getPlaylists =()=>{
+    spotifyApi.getUserPlaylists()
+    .then(res=>{
+        console.log('playlists', res)
+    })
+}
 
     return(
         <div>
            
             PLAYLIST COMPONENT
             <h2> Spotify Playlists </h2>
-            { loggedIn &&
-            
-                <>
-        <h2>Logged In</h2> 
-         
-            <p>Playlists</p>
-            </>
-
-            }
+        
           <div className = "login-link">
             <a href='http://localhost:8888'> Login to Spotify </a> 
             </div>
+            <div>
+            
+                
+                <>
+                <p>LOGGED IN</p>
+                <button onClick={getPlaylists}>playlists</button>
+                <p>Playing: song name</p>
+                </>
+             
            
+    
+           </div>
         </div>
-    )
-}
+
+
+    )}
 
 
 
