@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 //BACKEND: https://my-space-backend.herokuapp.com/
@@ -8,6 +8,7 @@ import SpotifyWebApi from 'spotify-web-api-js';
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
     const [playing, setPlaying] = useState(false);
+    const [playlist, setPlaylist]=useState();
     const spotifyApi = new SpotifyWebApi();
 //to get token
     const getHashParams=()=> {
@@ -26,17 +27,20 @@ const params = getHashParams();
 console.log('PARAMS', params);
 const accessToken = params.access_token
 
-spotifyApi.setAccessToken(accessToken)
-console.log('SETTING TOKEN', accessToken)
-   
+
+useEffect(()=>{
+
+    spotifyApi.setAccessToken(accessToken)
+    setLoggedIn(true);
+    console.log('SETTING TOKEN', loggedIn)
+},[])
 
        const getNowPlaying=()=>{ 
          
         spotifyApi.getMyCurrentPlaybackState()
         .then(res=>{
             console.log('PLAYING', accessToken, res)
-            //setPlaying();
-
+           
         })
         
         }   
@@ -44,34 +48,42 @@ console.log('SETTING TOKEN', accessToken)
 const getPlaylists =()=>{
     spotifyApi.getUserPlaylists()
     .then(res=>{
-        console.log('playlists', res)
+        console.log('playlists',loggedIn, res.items)
+        setPlaylist(res.items); //array of objects for each playlist
+
     })
 }
 
     return(
-        <div>
-           
-            PLAYLIST COMPONENT
+<>
+
+PLAYLIST COMPONENT
             <h2> Spotify Playlists </h2>
+
+    {loggedIn ? 
+    (
+        <div className="getPlaylist">      
+        <>
+        <p>LOGGED IN</p>
+        <button onClick={getPlaylists}>playlists</button>
+    <p>My Saved Playlists: </p>
+        </>
+   </div>
+    )
+    :
+    (    
+
+        <div className="login">
         
           <div className = "login-link">
             <a href='http://localhost:8888'> Login to Spotify </a> 
             </div>
-            <div>
-            
-                
-                <>
-                <p>LOGGED IN</p>
-                <button onClick={getPlaylists}>playlists</button>
-                <p>Playing: song name</p>
-                </>
-             
-           
-    
-           </div>
+
         </div>
+    )
+}   
 
-
+</>
     )}
 
 
