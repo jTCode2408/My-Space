@@ -1,14 +1,25 @@
 # My-Space
-App created to work with spotify log-in flow, display user info, visualizations
 
+App created to work with spotify log-in flow to view user information and interact with data.
+
+
+## Hosted at:
+
+https://my-space.vercel.app
 
 
 ## Features:
+- get favorite tracks 
+- get favorite artists
+- get relate artists
+- get recommended music
+- view audio feature visualizations
+
 
 
 
 ## Built With:
-### *ReactJS*
+### *ReactJS, NodeJS (Backend)*
 
 
 
