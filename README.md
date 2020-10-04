@@ -1,4 +1,4 @@
-# My-Space
+# My-Space (In progress)
 
 App created to work with spotify log-in flow to view user information and interact with data.
 
