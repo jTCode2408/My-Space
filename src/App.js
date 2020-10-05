@@ -9,10 +9,11 @@ function App() {
   return (
 
     <div className="App">
-      <Route path="/"> <Home/> </Route>
+      <Route exact path="/"> <Home/> </Route>
 <Switch>
+<Route path = "/playlist"> <Playlist/> </Route>
   <Route path = "/artists"> <Artists/> </Route>
-  <Route path = "/playlists"> <Playlist/> </Route>
+
 </Switch>
   
     </div>

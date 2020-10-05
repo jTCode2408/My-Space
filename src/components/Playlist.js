@@ -9,6 +9,7 @@ const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
     const [playlist, setPlaylist]=useState();
     const spotifyApi = new SpotifyWebApi();
+    
 //to get token
     const getHashParams=()=> {
         const hashParams ={};
@@ -52,10 +53,11 @@ const getArtists =()=>{
 TEST COMPONENT
             <h2>  </h2>
 
-    {loggedIn ? 
+    {accessToken ? 
     (
         <div className="getPlaylist">      
         <>
+    
         <p>LOGGED IN</p>
         <button onClick={getArtists}>Top Artists</button>
     <p>Your Top Artist's: </p>

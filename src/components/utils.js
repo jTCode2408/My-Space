@@ -5,6 +5,7 @@ export const useLocalStorage=(key, initialVal)=>{
         //usestate holding a fn
         const auth = window.localStorage.getItem(key);
         return auth ? JSON.parse(auth) : initialVal;
+
     })
 
 

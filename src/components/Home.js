@@ -8,6 +8,7 @@ import SpotifyWebApi from 'spotify-web-api-js';
 const Home=()=>{
     const [loggedIn, setLoggedIn] = useState(false);
     const spotifyApi = new SpotifyWebApi();
+
     //to get token
         const getHashParams=()=> {
             const hashParams ={};
@@ -24,6 +25,8 @@ const Home=()=>{
     const params = getHashParams();
     console.log('PARAMS', params);
     const accessToken = params.access_token
+    const refreshToken = params.refresh_token
+    window.localStorage.setItem('token',  accessToken);
 
     useEffect(()=>{
 
@@ -33,27 +36,22 @@ const Home=()=>{
     },[])
 
 
+   
 
 
     return(
         <div>
-            {loggedIn ?
-
-        (   <div className = "loggedIn">
+            <div className = "loggedIn">
             <h2>HOME</h2>
             <p>Welcome to Your Space. Browse your top artists, related artists, top tracks, audio features for songs, get recommended playlists. </p>
-        <Link to='/artists'> Top Artists </Link>
+        <Link to='/playlist'> Playlists </Link>
         </div>
-        )
-        :
-        (
+    
         <div className= "login">
 
-        <a href='http://localhost:8888'> Login to Spotify </a> 
-        
+        <a href='http://localhost:8888'> Login to Spotify </a>
+
         </div>
-        )
-        }
 
         </div>
     )
