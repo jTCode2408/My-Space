@@ -7,9 +7,9 @@ import SpotifyWebApi from 'spotify-web-api-js';
 
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
-    const [playing, setPlaying] = useState(false);
     const [playlist, setPlaylist]=useState();
     const spotifyApi = new SpotifyWebApi();
+    
 //to get token
     const getHashParams=()=> {
         const hashParams ={};
@@ -35,38 +35,32 @@ useEffect(()=>{
     console.log('SETTING TOKEN', loggedIn)
 },[])
 
-       const getNowPlaying=()=>{ 
-         
-        spotifyApi.getMyCurrentPlaybackState()
-        .then(res=>{
-            console.log('PLAYING', accessToken, res)
-           
-        })
-        
-        }   
-    
-const getPlaylists =()=>{
-    spotifyApi.getUserPlaylists()
+     
+const getArtists =()=>{
+    spotifyApi.getMyTopArtists()
     .then(res=>{
         console.log('playlists',loggedIn, res.items)
-        setPlaylist(res.items); //array of objects for each playlist
+        setPlaylist(res.items); 
 
     })
 }
 
+
+
     return(
 <>
 
-PLAYLIST COMPONENT
-            <h2> Spotify Playlists </h2>
+TEST COMPONENT
+            <h2>  </h2>
 
-    {loggedIn ? 
+    {accessToken ? 
     (
         <div className="getPlaylist">      
         <>
+    
         <p>LOGGED IN</p>
-        <button onClick={getPlaylists}>playlists</button>
-    <p>My Saved Playlists: </p>
+        <button onClick={getArtists}>Top Artists</button>
+    <p>Your Top Artist's: </p>
         </>
    </div>
     )
