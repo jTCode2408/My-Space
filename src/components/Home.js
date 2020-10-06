@@ -24,16 +24,9 @@ const Home=()=>{
     
     const params = getHashParams();
     console.log('PARAMS', params);
-    const accessToken = params.access_token
+    const token = params.access_token
     const refreshToken = params.refresh_token
-    window.localStorage.setItem('token',  accessToken);
-
-    useEffect(()=>{
-
-        spotifyApi.setAccessToken(accessToken)
-        setLoggedIn(true);
-        console.log('SETTING TOKEN', loggedIn)
-    },[])
+    localStorage.setItem('token',  token);
 
 
    

@@ -5,42 +5,44 @@ import {Link} from 'react-router-dom';
 import {useLocalStorage} from './utils';
 import SpotifyWebApi from 'spotify-web-api-js';
 
+
 const Playlist =()=>{
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(true);
     const [playlist, setPlaylist]=useState();
     const spotifyApi = new SpotifyWebApi();
     
 //to get token
-    const getHashParams=()=> {
-        const hashParams ={};
-        let e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-        e = r.exec(q)
-    while (e) {
-       hashParams[e[1]] = decodeURIComponent(e[2]);
-       e = r.exec(q);
-    }
-    return hashParams
-    }; 
-
-const params = getHashParams();
-console.log('PARAMS', params);
-const accessToken = params.access_token
 
 
 useEffect(()=>{
+    const accessToken= localStorage.getItem('token');
+    
+    axios.get('https://api.spotify.com/v1/me/playlists',{
+        headers: {
+            "Authorization": "Bearer" + accessToken,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res=>{
+        console.log('PLaylist res', res)
+        
+    })
+    .catch(err=>{
+        console.log(err)
+    })
 
-    spotifyApi.setAccessToken(accessToken)
-    setLoggedIn(true);
-    console.log('SETTING TOKEN', loggedIn)
+
+    //spotifyApi.setAccessToken(token);
+    //setLoggedIn(true);
+    //console.log('SETTING TOKEN', loggedIn, token,)
 },[])
 
      
 const getArtists =()=>{
     spotifyApi.getMyTopArtists()
     .then(res=>{
-        console.log('playlists',loggedIn, res.items)
-        setPlaylist(res.items); 
+        console.log('playlists',loggedIn)
+        //setPlaylist(res.items); 
 
     })
 }
@@ -53,8 +55,7 @@ const getArtists =()=>{
 TEST COMPONENT
             <h2>  </h2>
 
-    {accessToken ? 
-    (
+   
         <div className="getPlaylist">      
         <>
     
@@ -63,19 +64,14 @@ TEST COMPONENT
     <p>Your Top Artist's: </p>
         </>
    </div>
-    )
-    :
-    (    
 
         <div className="login">
         
-          <div className = "login-link">
-            <a href='http://localhost:8888'> Login to Spotify </a> 
-            </div>
+       
 
         </div>
-    )
-}   
+    
+
 
 </>
     )}
