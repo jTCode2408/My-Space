@@ -2,47 +2,64 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 //BACKEND: https://my-space-backend.herokuapp.com/
-import {useLocalStorage} from './utils';
+
 import SpotifyWebApi from 'spotify-web-api-js';
+
 
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
-    const [playlist, setPlaylist]=useState();
+    const [artists, setArtists]=useState();
     const spotifyApi = new SpotifyWebApi();
-    
+    const [userId, setUserId]=useState();
 //to get token
-    const getHashParams=()=> {
-        const hashParams ={};
-        let e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-        e = r.exec(q)
-    while (e) {
-       hashParams[e[1]] = decodeURIComponent(e[2]);
-       e = r.exec(q);
-    }
-    return hashParams
-    }; 
+
+  //to get token
+  const getHashParams=()=> {
+    const hashParams ={};
+    let e, r = /([^&;=]+)=?([^&;]*)/g,
+    q = window.location.hash.substring(1);
+    e = r.exec(q)
+while (e) {
+   hashParams[e[1]] = decodeURIComponent(e[2]);
+   e = r.exec(q);
+}
+return hashParams
+}; 
 
 const params = getHashParams();
 console.log('PARAMS', params);
-const accessToken = params.access_token
-
+const accessToken = params.access_token;
+const refreshToken = params.refresh_token;
 
 useEffect(()=>{
-
-    spotifyApi.setAccessToken(accessToken)
+    spotifyApi.setAccessToken(accessToken);
     setLoggedIn(true);
-    console.log('SETTING TOKEN', loggedIn)
+    console.log('SETTING TOKEN', loggedIn,accessToken)
 },[])
 
      
-const getArtists =()=>{
-    spotifyApi.getMyTopArtists()
+
+const getData =()=>{
+
+    spotifyApi.getMe()
+    .then(res=>{
+        console.log('user id', res.id);
+        setUserId(res.id)
+    })
+
+    spotifyApi.getUserPlaylists()
     .then(res=>{
         console.log('playlists',loggedIn, res.items)
-        setPlaylist(res.items); 
+       // setPlaylist(res.items); //array of objects for each playlist
 
     })
+    spotifyApi.getMyRecentlyPlayedTracks()
+    .then(res=>{
+        console.log('recently played', res)
+    })
+
+
+
 }
 
 
@@ -53,29 +70,23 @@ const getArtists =()=>{
 TEST COMPONENT
             <h2>  </h2>
 
-    {accessToken ? 
-    (
-        <div className="getPlaylist">      
+   
+        <div className="getArtist">      
         <>
     
         <p>LOGGED IN</p>
-        <button onClick={getArtists}>Top Artists</button>
-    <p>Your Top Artist's: </p>
+        <button onClick={getData}>My stats</button>
+
+    <p>Your Top: </p>
         </>
    </div>
-    )
-    :
-    (    
 
         <div className="login">
-        
-          <div className = "login-link">
-            <a href='http://localhost:8888'> Login to Spotify </a> 
-            </div>
-
+        <a href='http://localhost:8888'> Login to Spotify </a>
+       
         </div>
-    )
-}   
+    
+
 
 </>
     )}
