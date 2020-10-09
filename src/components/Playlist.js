@@ -9,7 +9,7 @@ import SpotifyWebApi from 'spotify-web-api-js';
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
     const [artists, setArtists]=useState();
-    const [playlist, setPlaylist]= useState();
+    const [playlist, setPlaylist]= useState([]);
     const [played, setPlayed]=useState();
     const spotifyApi = new SpotifyWebApi();
     const [userId, setUserId]=useState();
@@ -37,6 +37,9 @@ useEffect(()=>{
     spotifyApi.setAccessToken(accessToken);
     setLoggedIn(true);
     console.log('SETTING TOKEN', loggedIn,accessToken)
+    if (accessToken === null || false){
+        spotifyApi.setAccessToken(refreshToken);
+    }
 },[])
 
      
@@ -52,7 +55,7 @@ const getData =()=>{
     spotifyApi.getUserPlaylists()
     .then(res=>{
        const playlistArr=[]
-        res.items.forEach(item=>{
+        res.items.map(item=>{
             return playlistArr.push(item)
         })
        setPlaylist(playlistArr); //array of objects for each playlist
@@ -85,9 +88,17 @@ TEST COMPONENT
     
         <p>LOGGED IN</p>
         <button onClick={getData}>My stats</button>
-     
+   
         
     <p>Your Top: </p>
+    { playlist.map(item=>{
+            return (
+                <div className = "playlist-cont">
+              { item.name
+              }
+            </div>
+            )
+        })}
         </>
    </div>
 
