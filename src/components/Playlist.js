@@ -9,6 +9,8 @@ import SpotifyWebApi from 'spotify-web-api-js';
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
     const [artists, setArtists]=useState();
+    const [playlist, setPlaylist]= useState([]);
+    const [played, setPlayed]=useState();
     const spotifyApi = new SpotifyWebApi();
     const [userId, setUserId]=useState();
 //to get token
@@ -35,6 +37,9 @@ useEffect(()=>{
     spotifyApi.setAccessToken(accessToken);
     setLoggedIn(true);
     console.log('SETTING TOKEN', loggedIn,accessToken)
+    if (accessToken === null || false){
+        spotifyApi.setAccessToken(refreshToken);
+    }
 },[])
 
      
@@ -43,19 +48,26 @@ const getData =()=>{
 
     spotifyApi.getMe()
     .then(res=>{
-        console.log('user id', res.id);
-        setUserId(res.id)
+        console.log('user id', res);
+        setUserId(res)
     })
 
     spotifyApi.getUserPlaylists()
     .then(res=>{
-        console.log('playlists',loggedIn, res.items)
-       // setPlaylist(res.items); //array of objects for each playlist
-
+       const playlistArr=[]
+        res.items.map(item=>{
+            return playlistArr.push(item)
+        })
+       setPlaylist(playlistArr); //array of objects for each playlist
+       console.log('playlists',loggedIn, res.items);
+       console.log('playlis ARRAY', playlistArr);
     })
+
     spotifyApi.getMyRecentlyPlayedTracks()
     .then(res=>{
-        console.log('recently played', res)
+       // console.log('recently played', res.items);
+        setPlayed(res.items)
+
     })
 
 
@@ -76,8 +88,17 @@ TEST COMPONENT
     
         <p>LOGGED IN</p>
         <button onClick={getData}>My stats</button>
-
+   
+        
     <p>Your Top: </p>
+    { playlist.map(item=>{
+            return (
+                <div className = "playlist-cont">
+              { item.name
+              }
+            </div>
+            )
+        })}
         </>
    </div>
 
