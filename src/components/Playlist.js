@@ -11,8 +11,9 @@ const Playlist =()=>{
     const [artists, setArtists]=useState();
     const [playlist, setPlaylist]= useState([]);
     const [played, setPlayed]=useState();
+    const [songs, setSongs]=useState([]);
     const spotifyApi = new SpotifyWebApi();
-    const [userId, setUserId]=useState();
+    const [user, setUser]=useState();
 //to get token
 
   //to get token
@@ -25,42 +26,35 @@ while (e) {
    hashParams[e[1]] = decodeURIComponent(e[2]);
    e = r.exec(q);
 }
+
 return hashParams
+
 }; 
 
 const params = getHashParams();
-console.log('PARAMS', params);
 const accessToken = params.access_token;
 const refreshToken = params.refresh_token;
 
 useEffect(()=>{
+ 
     spotifyApi.setAccessToken(accessToken);
     setLoggedIn(true);
     console.log('SETTING TOKEN', loggedIn,accessToken)
-    if (accessToken === null || false){
-        spotifyApi.setAccessToken(refreshToken);
-    }
-},[])
-
-     
-
-const getData =()=>{
 
     spotifyApi.getMe()
     .then(res=>{
-        console.log('user id', res);
-        setUserId(res)
+        console.log('user ', res);
+        setUser(res.display_name)
     })
 
     spotifyApi.getUserPlaylists()
     .then(res=>{
-       const playlistArr=[]
-        res.items.map(item=>{
-            return playlistArr.push(item)
-        })
-       setPlaylist(playlistArr); //array of objects for each playlist
+      
+       setPlaylist( res.items.map(item=>{
+        return  item
+      })); //array of objects for each playlist
        console.log('playlists',loggedIn, res.items);
-       console.log('playlis ARRAY', playlistArr);
+    
     })
 
     spotifyApi.getMyRecentlyPlayedTracks()
@@ -70,46 +64,61 @@ const getData =()=>{
 
     })
 
+   
+},[accessToken])
 
 
-}
+
+ 
+
+
+
+
+
+
 
 
 
     return(
 <>
+        { accessToken != undefined ? 
+        (
+            <>
+            <h2>Welcome {user}  </h2>
 
-TEST COMPONENT
-            <h2>  </h2>
-
-   
-        <div className="getArtist">      
-        <>
-    
-        <p>LOGGED IN</p>
-        <button onClick={getData}>My stats</button>
-   
+        <div className="getPlaylists">      
+       
+       
         
-    <p>Your Top: </p>
     { playlist.map(item=>{
             return (
                 <div className = "playlist-cont">
-              { item.name
-              }
+              <p> {item.name} </p>  
+             <img src= {item.images[0].url} ></img>
+            <a href=  {item. external_urls.spotify } >View </a>
             </div>
             )
         })}
-        </>
+     
    </div>
 
+   </>
+
+        )
+        :
+        (
+
+            <>
         <div className="login">
         <a href='http://localhost:8888'> Login to Spotify </a>
        
         </div>
-    
+            </>
+        )
 
-
+        }
 </>
+
     )}
 
 
