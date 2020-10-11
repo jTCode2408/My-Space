@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
 //BACKEND: https://my-space-backend.herokuapp.com/
+import Player from './Player';
 
 import SpotifyWebApi from 'spotify-web-api-js';
-
+import SpotifyPlayer from 'react-spotify-player';
 
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
@@ -49,34 +50,32 @@ useEffect(()=>{
 
     spotifyApi.getUserPlaylists()
     .then(res=>{
-      
+     
        setPlaylist( res.items.map(item=>{
+ 
         return  item
       })); //array of objects for each playlist
        console.log('playlists',loggedIn, res.items);
-    
+   
     })
 
     spotifyApi.getMyRecentlyPlayedTracks()
     .then(res=>{
-       // console.log('recently played', res.items);
+       console.log('recently played', res.items);
         setPlayed(res.items)
-
     })
+
+
 
    
 },[accessToken])
 
-
-
- 
-
-
-
-
-
-
-
+const size={
+    width: '100%',
+    height: 300
+};
+const view = 'list';
+const theme='black';
 
 
     return(
@@ -85,6 +84,7 @@ useEffect(()=>{
         (
             <>
             <h2>Welcome {user}  </h2>
+            <h3>Your Saved Playlists</h3>
 
         <div className="getPlaylists">      
        
@@ -95,8 +95,16 @@ useEffect(()=>{
                 <div className = "playlist-cont">
               <p> {item.name} </p>  
              <img src= {item.images[0].url} ></img>
-            <a href=  {item. external_urls.spotify } >View </a>
+            <a href=  {item. external_urls.spotify} >View </a>       
+            <SpotifyPlayer
+            uri = {item.uri}
+            size={size}
+            view={view}
+            theme={theme}
+            /> 
+                
             </div>
+          
             )
         })}
      
