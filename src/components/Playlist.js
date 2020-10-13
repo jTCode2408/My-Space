@@ -4,7 +4,9 @@ import {Link} from 'react-router-dom';
 //BACKEND: https://my-space-backend.herokuapp.com/
 
 import SpotifyWebApi from 'spotify-web-api-js';
+import SpotifyPlayer from 'react-spotify-player';
 
+import {Player, PlaylistCont, PlaylistItems, Top, PlayerItems} from './styles';
 
 const Playlist =()=>{
     const [loggedIn, setLoggedIn] = useState(false);
@@ -16,7 +18,6 @@ const Playlist =()=>{
     const [user, setUser]=useState();
 //to get token
 
-  //to get token
   const getHashParams=()=> {
     const hashParams ={};
     let e, r = /([^&;=]+)=?([^&;]*)/g,
@@ -49,58 +50,73 @@ useEffect(()=>{
 
     spotifyApi.getUserPlaylists()
     .then(res=>{
-      
+     
        setPlaylist( res.items.map(item=>{
+ 
         return  item
       })); //array of objects for each playlist
        console.log('playlists',loggedIn, res.items);
-    
+   
     })
 
     spotifyApi.getMyRecentlyPlayedTracks()
     .then(res=>{
-       // console.log('recently played', res.items);
+       console.log('recently played', res.items);
         setPlayed(res.items)
-
     })
+
+/////TO DO: filter playlists length, add pagination somehow(players for 20 playlist loading extremely slow...also restyle image sizes & player sizes see if that helps)
 
    
 },[accessToken])
 
-
-
- 
-
-
-
-
-
-
-
+const size={
+    width: '100%',
+    height: 300
+};
+const view = 'list';
+const theme='black';
 
 
     return(
 <>
-        { accessToken != undefined ? 
+        { accessToken !== undefined ? 
         (
             <>
+            <Top>
             <h2>Welcome {user}  </h2>
+            <h3>Your Saved Playlists</h3>
+            </Top>
 
-        <div className="getPlaylists">      
-       
+        <PlaylistCont>      
        
         
     { playlist.map(item=>{
             return (
-                <div className = "playlist-cont">
+            
+                <PlayerItems>
+
+                <PlaylistItems>
               <p> {item.name} </p>  
              <img src= {item.images[0].url} ></img>
-            <a href=  {item. external_urls.spotify } >View </a>
-            </div>
+           
+            </PlaylistItems>
+            <a href=  {item. external_urls.spotify} >View </a>  
+           <Player>
+            <SpotifyPlayer
+            uri = {item.uri}
+            size={size}
+            view={view}
+            theme={theme}
+            /> 
+            </Player>
+         
+          </PlayerItems>
             )
-        })}
+        })
+        }
      
-   </div>
+   </PlaylistCont>
 
    </>
 
@@ -108,12 +124,11 @@ useEffect(()=>{
         :
         (
 
-            <>
         <div className="login">
         <a href='http://localhost:8888'> Login to Spotify </a>
        
         </div>
-            </>
+       
         )
 
         }
