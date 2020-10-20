@@ -48,7 +48,19 @@ useEffect(()=>{
         setUser(res.display_name)
     })
 
-    spotifyApi.getUserPlaylists()
+
+    const getRecentlyPlayer = spotifyApi.getMyRecentlyPlayedTracks()
+    .then(res=>{
+       console.log('recently played', res.items);
+        setPlayed(res.items)
+    })
+
+/////TO DO: filter playlists length, add pagination somehow(players for 20 playlist loading extremely slow(load 1-10, add 'show more' button for next 10, etc)
+
+   
+},[accessToken])
+
+const getPlaylists= spotifyApi.getUserPlaylists()
     .then(res=>{
      
        setPlaylist( res.items.map(item=>{
@@ -59,16 +71,6 @@ useEffect(()=>{
    
     })
 
-    spotifyApi.getMyRecentlyPlayedTracks()
-    .then(res=>{
-       console.log('recently played', res.items);
-        setPlayed(res.items)
-    })
-
-/////TO DO: filter playlists length, add pagination somehow(players for 20 playlist loading extremely slow...also restyle image sizes & player sizes see if that helps)
-
-   
-},[accessToken])
 
 const size={
     width: '100%',
@@ -85,6 +87,7 @@ const theme='black';
             <>
             <Top>
             <h2>Welcome {user}  </h2>
+
             <h3>Your Saved Playlists</h3>
             </Top>
 
@@ -97,11 +100,17 @@ const theme='black';
                 <PlayerItems>
 
                 <PlaylistItems>
-              <p> {item.name} </p>  
-             <img src= {item.images[0].url} ></img>
+                    
+             <h4>{item.name} </h4>  
+             
+             <a href=  {item.external_urls.spotify}>
+             
+             <img src= {item.images[0].url} alt="playlist art" ></img>
+              </a> 
+             
            
             </PlaylistItems>
-            <a href=  {item. external_urls.spotify} >View </a>  
+    
            <Player>
             <SpotifyPlayer
             uri = {item.uri}
