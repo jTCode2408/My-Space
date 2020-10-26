@@ -49,7 +49,7 @@ useEffect(()=>{
     })
 
 
-    const getRecentlyPlayer = spotifyApi.getMyRecentlyPlayedTracks()
+    const getRecentlyPlayed = spotifyApi.getMyRecentlyPlayedTracks()
     .then(res=>{
        console.log('recently played', res.items);
         setPlayed(res.items)
@@ -60,7 +60,7 @@ useEffect(()=>{
    
 },[accessToken])
 
-const getPlaylists= spotifyApi.getUserPlaylists()
+const getPlaylists= spotifyApi.getUserPlaylists({ limit: 6 })
     .then(res=>{
      
        setPlaylist( res.items.map(item=>{
@@ -135,8 +135,7 @@ const theme='black';
 
         <div className="login">
             <a href= 'https://my-space-backend.herokuapp.com/login'>Login to Spotify </a>
-        <a href='http://localhost:8888'> Login to Spotify </a>
-       
+ 
         </div>
        
         )
