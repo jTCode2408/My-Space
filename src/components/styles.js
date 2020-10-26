@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
 export const PlaylistCont = styled.div`
-
+border:2px solid red;
 display:flex;
 flex-wrap:wrap;
 margin:0 auto;
 align-items:center;
+justify-content:center;
+margin:2%;
 `
 
 
@@ -15,7 +17,7 @@ color: blue
 `
 
 export const PlaylistItems=styled.div`
-
+border:2px solid blue;
 width:100%;
 margin:0 auto;
 
